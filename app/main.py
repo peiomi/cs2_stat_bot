@@ -1,5 +1,4 @@
 from fastapi import FastAPI, Depends
-from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 
 from .database.connection import Base, engine
@@ -16,6 +15,6 @@ def root():
 
 """
 MESSAGE TO TOMMORROW ME:
- - finish models/schemas/routes 
+ - routes 
  - dont leave pc until routes r routing 
 """
