@@ -9,3 +9,18 @@ class Match(Base):
     match_date = Column(Date, nullable=False)
     demo_filename = Column(String, unique=True, nullable=False)
     winning_team = Column(String)
+
+    cs_map = relationship(
+        "Map",
+        back_populates="matches"
+    )
+
+    rounds = relationship(
+        "Round",
+        back_populates="match"
+    )
+
+    player_stats = relationship(
+        "PlayerMatchStats",
+        back_populates="match"
+    )

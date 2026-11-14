@@ -13,3 +13,13 @@ class PlayerMatchStats(Base):
     hs_kills = Column(Integer, nullable=False)
     adr = Column(Integer, nullable=False)
     rating = Column(String)
+
+    match = relationship(
+        "Match",
+        back_populates="player_stats"
+    )
+
+    player = relationship(
+        "Player",
+        back_populates="match_stats"
+    )

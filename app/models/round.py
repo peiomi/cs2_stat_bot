@@ -8,3 +8,18 @@ class Round(Base):
     match_id = Column(Integer, ForeignKey("matches.id"), nullable=False)
     round_number = Column(Integer, nullable=False)
     winning_side = Column(String, nullable=False)
+
+    match = relationship(
+        "Match",
+        back_populates="rounds"
+    )
+
+    kill_events = relationship(
+        "KillEvent",
+        back_populates="match_round"
+    )
+
+    grenade_events = relationship(
+        "GrenadeEvent",
+        back_populates="match_round"
+    )

@@ -6,3 +6,8 @@ class Map(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
+
+    matches = relationship(
+        "Match",
+        back_populates="cs_map"
+    )

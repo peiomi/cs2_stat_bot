@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Float, Enum
+from sqlalchemy.orm import relationship
 from ..database.connection import Base
 from ..util.grenade_enum import GrenadeType
 
@@ -16,3 +17,8 @@ class GrenadeEvent(Base):
     x = Column(Float, nullable=False)
     y = Column(Float, nullable=False)
     z = Column(Float, nullable=False, default=0.0)
+
+    match_round = relationship(
+        "Round",
+        back_populates="grenade_events"
+    )
