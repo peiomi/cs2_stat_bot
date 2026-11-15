@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float
+from sqlalchemy.orm import relationship
 from ..database.connection import Base
 
 class KillEvent(Base):

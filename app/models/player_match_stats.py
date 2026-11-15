@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
+from sqlalchemy.orm import relationship
 from ..database.connection import Base
 
 class PlayerMatchStats(Base):
@@ -14,7 +15,7 @@ class PlayerMatchStats(Base):
     adr = Column(Integer, nullable=False)
     rating = Column(String)
 
-    match = relationship(
+    cs_match = relationship(
         "Match",
         back_populates="player_stats"
     )
@@ -22,4 +23,12 @@ class PlayerMatchStats(Base):
     player = relationship(
         "Player",
         back_populates="match_stats"
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "player_id",
+            "match_id",
+            name="uq_player_match"
+        ),
     )

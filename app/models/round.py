@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from ..database.connection import Base
 
 class Round(Base):
@@ -9,7 +10,7 @@ class Round(Base):
     round_number = Column(Integer, nullable=False)
     winning_side = Column(String, nullable=False)
 
-    match = relationship(
+    cs_match = relationship(
         "Match",
         back_populates="rounds"
     )

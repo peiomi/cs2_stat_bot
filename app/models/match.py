@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Date, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from ..database.connection import Base
 
 class Match(Base):
@@ -17,10 +18,12 @@ class Match(Base):
 
     rounds = relationship(
         "Round",
-        back_populates="match"
+        back_populates="cs_match",
+        cascade="all, delete-orphan"
     )
 
     player_stats = relationship(
         "PlayerMatchStats",
-        back_populates="match"
+        back_populates="cs_match",
+        cascade="all, delete-orphan"
     )
