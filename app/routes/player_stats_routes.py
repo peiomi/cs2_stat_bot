@@ -8,15 +8,16 @@ router = APIRouter(prefix="/player-stats", tags=["PlayerMatchStats"])
 
 
 def get_stats_or_404(
-    stats_id: int,
+    player_id: int,
+    match_id: int,
     db: Session
 ):
 
     stats = (
         db.query(PlayerMatchStats)
         .filter(
-            PlayerMatchStats.player_id == player_match_stats.player_id,
-            PlayerMatchStats.match_id == player_match_stats.match_id
+            PlayerMatchStats.player_id == player_id,
+            PlayerMatchStats.match_id == match_id
         )
         .first()
     )
