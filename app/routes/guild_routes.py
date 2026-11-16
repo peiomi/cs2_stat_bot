@@ -1,18 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from ..database.util import get_db
-from ..models.discord_server import DiscordServer
-from ..schemas.discord_server_schema import DiscordServerCreate, DiscordServerResponse, DiscordServerUpdate
+from ..models.guild import Guild
+from ..models.guild_member import GuildMember
+from ..schemas.guild_schema import GuildCreate, GuildResponse, GuildUpdate
+from ..schemas.guild_member_schema import GuildMemberCreate, GuildMemberResponse, GuildMemberUpdate
 
-router = APIRouter(prefix="/guilds", tags=["DiscordServer"])
+router = APIRouter(prefix="/guilds", tags=["Guild"])
 
 def get_guild_or_404(
-    server_id: int,
+    guild_id: int,
     db: Session
 ):
     guild = (
-        db.query(DiscordServer)
-        .filter(DiscordServer.id == server_id)
+        db.query(Guild)
+        .filter(Guild.id == guild_id)
         .first()
     )
 
@@ -24,25 +26,47 @@ def get_guild_or_404(
 
     return guild
 
-@router.get("/", response_model=list[DiscordServerResponse])
-def get_guilds(db: Session = Depends(get_db)):
-    return db.query(DiscordServer).all()
+def get_guild_member_or_404(
+    guild_id: int,
+    member_id: int,
+    db: Session
+):
+    guild_member = (
+        db.query(GuildMember)
+        .filter(
+            GuildMember.guild_id == guild_id,
+            GuildMember.id == member_id
+        )
+        .first()
+    )
 
-@router.get("/{server_id}", response_model=DiscordServerResponse)
+    if not guild_member:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Guild member not found"
+        )
+
+    return guild_member
+
+@router.get("/", response_model=list[GuildResponse])
+def get_guilds(db: Session = Depends(get_db)):
+    return db.query(Guild).all()
+
+@router.get("/{guild_id}", response_model=GuildResponse)
 def get_guild(
-    server_id: int,
+    guild_id: int,
     db: Session = Depends(get_db)
 ):
-    return get_guild_or_404(server_id, db)
+    return get_guild_or_404(guild_id, db)
 
-@router.post("/", response_model=DiscordServerResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=GuildResponse, status_code=status.HTTP_201_CREATED)
 def create_guild(
-    guild: DiscordServerCreate,
+    guild: GuildCreate,
     db: Session = Depends(get_db)
 ):
     existing_guild = (
-        db.query(DiscordServer)
-        .filter(DiscordServer.guild_id == guild.guild_id)
+        db.query(Guild)
+        .filter(Guild.guild_id == guild.guild_id)
         .first()
     )
 
@@ -52,7 +76,7 @@ def create_guild(
             detail="Guild already exists"
         )
 
-    new_guild = DiscordServer(
+    new_guild = Guild(
         guild_id=guild.guild_id,
         name=guild.name
     )
@@ -63,29 +87,119 @@ def create_guild(
 
     return new_guild
 
-@router.delete("/{server_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{guild_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_guild(
-    server_id: int,
+    guild_id: int,
     db: Session = Depends(get_db)
 ):
-    guild = get_guild_or_404(server_id, db)
+    guild = get_guild_or_404(guild_id, db)
 
     db.delete(guild)
     db.commit()
 
-@router.put("/{server_id}", response_model=DiscordServerResponse)
+@router.put("/{guild_id}", response_model=GuildResponse)
 def update_guild(
-    server_id: int,
-    server_update: DiscordServerUpdate,
+    guild_id: int,
+    guild_update: GuildUpdate,
     db: Session = Depends(get_db)
 ):
 
-    guild = get_guild_or_404(server_id, db)
+    guild = get_guild_or_404(guild_id, db)
 
-    if server_update.name is not None:
-        guild.name = server_update.name
+    if guild_update.name is not None:
+        guild.name = guild_update.name
 
     db.commit()
     db.refresh(guild)
 
     return guild
+
+@router.get("/{guild_id}/members", response_model=list[GuildMemberResponse])
+def get_members(
+    guild_id: int,
+    db: Session = Depends(get_db)
+):
+    guild = get_guild_or_404(guild_id, db)
+
+    return guild.guild_members
+
+@router.get("/{guild_id}/members/{member_id}", response_model=GuildMemberResponse)
+def get_member(
+    guild_id: int,
+    member_id: int,
+    db: Session = Depends(get_db)
+):
+
+    member = get_guild_member_or_404(guild_id, member_id, db)
+
+    return member
+
+@router.post("/{guild_id}/members", response_model=GuildMemberResponse, status_code=status.HTTP_201_CREATED)
+def create_guild_member(
+    guild_id: int,
+    member: GuildMemberCreate,
+    db: Session = Depends(get_db)
+):
+
+    guild = get_guild_or_404(guild_id, db)
+
+    existing_member = (
+        db.query(GuildMember)
+        .filter(
+            GuildMember.guild_id == guild_id,
+            GuildMember.discord_user_id == member.discord_user_id
+        )
+        .first()
+    )
+
+    if existing_member:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Member already exists in this guild"
+        )
+
+    new_member = GuildMember(
+        nickname=member.nickname,
+        guild_id=guild.id,
+        discord_user_id=member.discord_user_id,
+        member_role=member.member_role
+    )
+
+    db.add(new_member)
+    db.commit()
+    db.refresh(new_member)
+
+    return new_member
+
+@router.delete("/{guild_id}/members/{member_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_member(
+    guild_id: int,
+    member_id: int,
+    db: Session = Depends(get_db)
+):
+
+    member = get_guild_member_or_404(guild_id, member_id, db)
+
+    db.delete(member)
+    db.commit()
+
+@router.put("/{guild_id}/members/{member_id}", response_model=GuildMemberResponse)
+def update_guild_member(
+    guild_id: int,
+    member_id: int,
+    guild_member_update: GuildMemberUpdate,
+    db: Session = Depends(get_db)
+):
+
+    member = get_guild_member_or_404(guild_id, member_id, db)
+
+    if guild_member_update.nickname is not None:
+        member.nickname = guild_member_update.nickname
+
+    if guild_member_update.member_role is not None:
+        member.member_role = guild_member_update.member_role
+
+    db.commit()
+    db.refresh(member)
+
+    return member

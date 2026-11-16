@@ -1,16 +1,16 @@
 from pydantic import BaseModel, ConfigDict
 
-class DiscordServerBase(BaseModel):
+class GuildBase(BaseModel):
     guild_id: str
     name: str
 
-class DiscordServerCreate(DiscordServerBase):
+class GuildCreate(GuildBase):
     pass
 
-class DiscordServerResponse(DiscordServerBase):
+class GuildResponse(GuildBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
 
-class DiscordServerUpdate(BaseModel):
+class GuildUpdate(BaseModel):
     name: str | None = None

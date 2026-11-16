@@ -16,14 +16,13 @@ class PlayerBase(BaseModel):
         return value
 
 class PlayerCreate(PlayerBase):
-    discord_member_id: int | None = None
+    pass
 
 class PlayerResponse(PlayerBase):
     id: int
-    discord_member_id: int | None
 
     model_config = ConfigDict(from_attributes=True)
 
 class PlayerUpdate(BaseModel):
     player_name: str | None = None
-    discord_member_id: int | None = None
+    

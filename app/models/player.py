@@ -8,10 +8,15 @@ class Player(Base):
     id = Column(Integer, primary_key=True)
     steam_id = Column(String, unique=True, nullable=False)
     player_name = Column(String, nullable=False)
-    discord_member_id = Column(Integer, ForeignKey("discord_members.id"))
 
-    discord_member = relationship(
-        "DiscordMember",
+    discord_user = relationship(
+        "DiscordUser",
+        back_populates="player",
+        uselist=False
+    )
+
+    guild_member = relationship(
+        "GuildMember",
         back_populates="player"
     )
 
