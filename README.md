@@ -2,7 +2,7 @@
 
 A Discord bot and ETL pipeline for parsing Counter-Strike 2 demo files, generating player performance metrics, and producing data visualizations for match reviewing.
 
-> **Project status:** Active Development. I am in the database designing stage.  
+> **Project status:** Active Development. I am currently building models/schemas for the SQL tables and the API's with their CRUD operations.  
 
 ## Overview 
 
@@ -89,7 +89,7 @@ Entities:
 - Player Stats
 - Performance Reports
 
-## Future Enhancments (the ambitious ideas that are taking a backseat)
+## Ideas
 
 - Discord server specific leaderboards
 - Automated demo retrieval
