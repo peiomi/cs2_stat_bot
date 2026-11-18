@@ -1,11 +1,18 @@
-def pipeline(sudo_code):
-    demo_parser()
-    process_demo()
 
-    round_extractor()
-    kill_extractor()
-    grenade_extractor()
+class Pipeline():
 
-    player_stats()
+    def run(self):
+        demo_parser()
+        process_demo()
 
-    postgres_loader()
+        round_extractor()
+        kill_extractor()
+        grenade_extractor()
+
+        player_stats()
+
+        postgres_loader()
+
+if __name__ == "__main__":
+    pipeline = Pipeline()
+    pipeline.run()

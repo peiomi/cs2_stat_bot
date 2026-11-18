@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from . import models
 from .routes import routers
-from .database.connection import Base, engine
+from .database import Base, engine
 
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
@@ -16,5 +16,5 @@ def root():
 
 """
 MESSAGE TO TOMMORROW ME:
- - decide between demoparser2 or awpy
+ - start on first step of pipeline
 """
