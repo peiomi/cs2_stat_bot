@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from ..database.util import get_db
-from ..models.discord_user import DiscordUser
+from ..database import get_db
+from ..models import DiscordUser
 from ..schemas.discord_user_schema import DiscordUserCreate, DiscordUserResponse, DiscordUserUpdate
 
 from .player_routes import get_player_or_404

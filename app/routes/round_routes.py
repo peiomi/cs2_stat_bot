@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from ..database.util import get_db
-from ..models.round import Round
+from ..database import get_db
+from ..models import Round
 from ..schemas.round_schema import RoundCreate, RoundResponse
 from .match_routes import get_match_or_404
 
@@ -36,7 +36,7 @@ def get_rounds(
     db: Session = Depends(get_db)
 ):
     get_match_or_404(match_id, db)
-    
+
     rounds = (
         db.query(Round)
         .filter(Round.match_id == match_id)

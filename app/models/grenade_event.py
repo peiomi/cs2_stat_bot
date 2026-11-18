@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Float, Enum
 from sqlalchemy.orm import relationship
-from ..database.connection import Base
-from ..util.grenade_enum import GrenadeType
+from ..database import Base
+from ..util import GrenadeType
 
 class GrenadeEvent(Base):
     __tablename__ = "grenade_events"

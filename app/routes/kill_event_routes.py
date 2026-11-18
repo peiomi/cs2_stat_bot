@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
-from ..database.util import get_db
-from ..models.kill_event import KillEvent
+from ..database import get_db
+from ..models import KillEvent
 from ..schemas.kill_event_schema import KillEventCreate, KillEventResponse
 from .round_routes import get_round_or_404
 

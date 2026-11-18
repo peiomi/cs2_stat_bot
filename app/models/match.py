@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Date, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from ..database.connection import Base
+from ..database import Base
 
 class Match(Base):
     __tablename__ = "matches"

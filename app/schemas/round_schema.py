@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from ..util.side_enum import Side
+from ..util import Side
 
 class RoundBase(BaseModel):
     round_number: int

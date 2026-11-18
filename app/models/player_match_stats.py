@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
-from ..database.connection import Base
+from ..database import Base
 
 class PlayerMatchStats(Base):
     __tablename__ = "player_match_stats"

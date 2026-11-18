@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from ..database.util import get_db
-from ..models.match import Match
+from ..database import get_db
+from ..models import Match
 from ..schemas.match_schema import MatchResponse, MatchCreate
 
 router = APIRouter(prefix="/matches", tags=["Matches"])
@@ -44,7 +44,7 @@ def create_match(
 
     existing_match = (
         db.query(Match)
-        .filter(Match.demo_filename = match.demo_filename)
+        .filter(Match.demo_filename == match.demo_filename)
         .first()
     )
 

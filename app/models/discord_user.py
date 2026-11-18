@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from ..database.connection import Base
+from ..database import Base
 
 class DiscordUser(Base):
     __tablename__ = "discord_users"

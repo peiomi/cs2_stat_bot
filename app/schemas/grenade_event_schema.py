@@ -1,4 +1,5 @@
 from pydantic import BaseModel, ConfigDict
+from ..util import GrenadeType
 
 class GrenadeEventBase(BaseModel):
     grenade_type: GrenadeType

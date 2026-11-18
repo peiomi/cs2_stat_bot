@@ -1,4 +1,4 @@
-from .connection import SessionLocal
+from . import SessionLocal
 
 def get_db():
     db = SessionLocal()

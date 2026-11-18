@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from ..database.util import get_db
-from ..models.guild import Guild
-from ..models.guild_member import GuildMember
+from ..database import get_db
+from ..models import Guild
+from ..models import GuildMember
 from ..schemas.guild_schema import GuildCreate, GuildResponse, GuildUpdate
 from ..schemas.guild_member_schema import GuildMemberCreate, GuildMemberResponse, GuildMemberUpdate
 

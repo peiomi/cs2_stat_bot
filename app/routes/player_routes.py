@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from ..database.util import get_db
-from ..models.player import Player
+from ..database import get_db
+from ..models import Player
 from ..schemas.player_schema import PlayerResponse, PlayerCreate, PlayerUpdate
 
 
@@ -59,8 +59,7 @@ def create_player(
 
     new_player = Player(
         steam_id=player.steam_id,
-        player_name=player.player_name,
-        discord_member_id=player.discord_member_id
+        player_name=player.player_name
     )
 
     db.add(new_player)
@@ -91,9 +90,6 @@ def update_player(
 
     if player_update.player_name is not None:
         player.player_name = player_update.player_name
-
-    if player_update.discord_member_id is not None:
-        player.discord_member_id = player_update.discord_member_id
 
     db.commit()
     db.refresh(player)

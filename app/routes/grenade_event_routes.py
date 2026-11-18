@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from ..database.util import get_db
-from ..models.grenade_event import GrenadeEvent
+from ..database import get_db
+from ..models import GrenadeEvent
 from ..schemas.grenade_event_schema import GrenadeEventResponse, GrenadeEventCreate
 from .round_routes import get_round_or_404
 
