@@ -1,11 +1,12 @@
 from pydantic import BaseModel, ConfigDict
+from ..util.side_enum import Side
 
 class RoundBase(BaseModel):
     round_number: int
-    winning_side: str
+    winning_side: Side
 
 class RoundCreate(RoundBase):
-    match_id: int
+    pass
 
 class RoundResponse(RoundBase):
     id: int

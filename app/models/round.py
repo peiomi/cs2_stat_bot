@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from ..database.connection import Base
 
@@ -23,4 +23,12 @@ class Round(Base):
     grenade_events = relationship(
         "GrenadeEvent",
         back_populates="match_round"
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "match_id",
+            "round_number",
+            name="uq_match_round"
+        ),
     )

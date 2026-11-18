@@ -44,7 +44,7 @@ def create_match(
 
     existing_match = (
         db.query(Match)
-        .filter(Match.demo_filename == match.demo_filename)
+        .filter(Match.demo_filename = match.demo_filename)
         .first()
     )
 
