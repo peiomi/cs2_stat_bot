@@ -7,13 +7,11 @@ class KillEventBase(BaseModel):
     y: float 
     z: float = 0.0
 
-class KillEventsCreate(KillEventBase):
-    round_id: int
-    match_id: int
+class KillEventCreate(KillEventBase):
     killer_id: int | None = None
     victim_id: int
 
-class KillEventsResponse(KillEventBase):
+class KillEventResponse(KillEventBase):
     id: int
     match_id: int
     round_id: int

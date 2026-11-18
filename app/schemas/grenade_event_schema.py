@@ -9,8 +9,6 @@ class GrenadeEventBase(BaseModel):
     z: float = 0.0
 
 class GrenadeEventCreate(GrenadeEventBase):
-    round_id: int
-    match_id: int
     player_id: int
 
 class GrenadeEventResponse(GrenadeEventBase):
