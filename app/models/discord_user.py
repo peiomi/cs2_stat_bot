@@ -8,7 +8,7 @@ class DiscordUser(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False)
     discord_user_id = Column(String, unique=True, nullable=False)
-    player_id = Column(Integer, ForeignKey("players.id"), unique=True, nullable=False)
+    player_id = Column(Integer, ForeignKey("players.id"), unique=True)
 
     guild_memberships = relationship(
         "GuildMember",
