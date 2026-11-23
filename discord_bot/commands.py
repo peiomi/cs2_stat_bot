@@ -1,12 +1,12 @@
 import requests
-import bz2
-import shutil
+import asyncio
 
 from .bot import bot
-from .pipeline import DemoParser
+from .pipeline import Pipeline
 
 @bot.tree.command(name="process-demo")
 async def process_demo(interaction: discord.Interaction, demo_url: str):
+    # df to refactor this
     if interaction.user.id not in database:
         await interaction.response.send_message(
             "steam account not linked. use /link-steam <steam_id> command first."
@@ -17,17 +17,10 @@ async def process_demo(interaction: discord.Interaction, demo_url: str):
         "downloading demo..."
     )
 
-    demo = DemoParser(demo_url)
-    demo.process_demo()
-    players = demo.process_players()
+    pipeline = Pipeline(demo_url)
+    await asyncio.to_thread(pipeline.run)
 
-    for player in players:
-        payload = {
-            "steam_id": player.steamid,
-            "name": player.name
-        }
-
-        response = requests.post("http://localhost:8000/players", json=payload)
+    await interaction.followup.send("done!")
 
 @bot.tree.command(name="link-steam")
 async def link_steam_id(interaction: discord.Interaction, steam_id: str):

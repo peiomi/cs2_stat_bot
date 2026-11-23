@@ -1,4 +1,4 @@
-from .demo_parser import DemoParser
+from .demo_processor import DemoProcessor
 from .grenade_extractor import GrenadeExtractor
 from .round_extractor import RoundExtractor
 from .kill_extractor import KillExtractor

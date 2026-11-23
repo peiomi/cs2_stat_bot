@@ -1,6 +1,9 @@
-from demoparser2 import DemoParser as Demo
+from demoparser2 import DemoParser 
+import requests
+import bz2
+import shutil
 
-class DemoParser():
+class DemoProcessor():
     def __init__(self, demo_url: str):
         self.demo_url = demo_url
         self.demo = None
@@ -15,12 +18,24 @@ class DemoParser():
                 shutil.copyfileobj(source, dest)
 
 
-        self.demo = Demo("match.dem")
+        self.demo = DemoParser("match.dem")
 
         return self.demo
 
     def process_players(self):
+        if self.demo is None:
+            raise ValueError("process_demo() must be called first")
+
         players = self.demo.parse_player_info()
+
+        for player in players:
+            payload = {
+                "steam_id": player.steamid,
+                "name": player.name
+            }
+
+            response = requests.post("http://localhost:8000/players", json=payload)
+        
         return players
 
     
@@ -44,5 +59,4 @@ if __name__ == "__main__":
 
 """
 map name: header = demo.parse_header() > map_name = header["map_name"]
-player name/ steam id: demo.parse_player_info()
 """

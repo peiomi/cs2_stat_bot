@@ -1,5 +1,5 @@
 from . import (
-    DemoParser,
+    DemoProcessor,
     RoundExtractor,
     KillExtractor,
     GrenadeExtractor,
@@ -8,8 +8,8 @@ from . import (
 )
 
 class Pipeline():
-    def __init__(self):
-        self.parser = DemoParser()
+    def __init__(self, demo_url):
+        self.parser = DemoProcessor(demo_url=demo_url)
         self.rounds = RoundExtractor()
         self.kills = KillExtractor()
         self.grenades = GrenadeExtractor()
@@ -17,8 +17,11 @@ class Pipeline():
         self.postgres = PostgresLoader()
 
     def run(self):
-        demo = self.parser.parse_demo("test.dem")
+        # real code
+        processed_demo = self.parser.process_demo()
+        self.parser.process_players()
 
+        # fake TODO code 
         rounds = self.rounds.extract(processed_demo)
         kill_events = self.kills.extract(processed_demo)
         grenade_events = self.grenades.extract(processed_demo)
