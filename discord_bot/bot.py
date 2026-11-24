@@ -18,13 +18,3 @@ class CS2StatBot(discord.Client):
 
 bot = CS2StatBot()
 
-@bot.event
-async def on_guild_join(guild):
-    payload = {
-        "guild_id": guild.id,
-        "name": guild.name
-    }
-
-    response = requests.post("http://localhost:8000/guilds", json=payload)
-
-    print(response.status_code)

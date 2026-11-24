@@ -16,5 +16,5 @@ def root():
 
 """
 MESSAGE TO TOMMORROW ME:
- - start on first step of pipeline
+ - do guild memeber table insert logic
 """

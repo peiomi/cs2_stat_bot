@@ -5,20 +5,27 @@ from .bot import bot
 from .pipeline import Pipeline
 
 @bot.tree.command(name="process-demo")
-async def process_demo(interaction: discord.Interaction, demo_url: str):
-    # df to refactor this
-    if interaction.user.id not in database:
+async def process_demo(interaction: discord.Interaction, source: str | discord.Attachment):
+    response = requests.get( f"http://localhost:8000/discord-users/discord-id/{interaction.user.id}")
+
+    if response.status_code == 404:
         await interaction.response.send_message(
             "steam account not linked. use /link-steam <steam_id> command first."
             "use /help if you need help finding your steam ID."
         )
         return
+
     await interaction.response.send_message(
         "downloading demo..."
     )
 
-    pipeline = Pipeline(demo_url)
-    await asyncio.to_thread(pipeline.run)
+    try:
+        pipeline = Pipeline(source)
+        await pipeline.run()
+
+    except ValueError as e:
+        await interaction.followup.send(str(e))
+        return
 
     await interaction.followup.send("done!")
 

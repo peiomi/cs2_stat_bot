@@ -107,3 +107,24 @@ def update_discord_user(
     db.refresh(discord_user)
 
     return discord_user
+
+@router.get("/discord-id/{discord_user_id}")
+def get_discord_user_by_discord_id(
+    discord_user_id: int,
+    db: Session = Depends(get_db)
+):
+    discord_user = (
+        db.query(DiscordUser)
+        .filter(
+            DiscordUser.discord_user_id == discord_user_id
+        )
+        .first()
+    )
+
+    if not discord_user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    return discord_user

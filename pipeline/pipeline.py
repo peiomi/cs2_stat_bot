@@ -1,3 +1,4 @@
+import discord
 from . import (
     DemoProcessor,
     RoundExtractor,
@@ -8,7 +9,7 @@ from . import (
 )
 
 class Pipeline():
-    def __init__(self, demo_url):
+    def __init__(self, source: str | discord.Attachment):
         self.parser = DemoProcessor(demo_url=demo_url)
         self.rounds = RoundExtractor()
         self.kills = KillExtractor()
@@ -16,12 +17,14 @@ class Pipeline():
         self.player_stats = PlayerStatsExtractor()
         self.postgres = PostgresLoader()
 
-    def run(self):
+    async def run(self):
         # real code
-        processed_demo = self.parser.process_demo()
+        processed_demo = await self.parser.process_demo()
         self.parser.process_players()
+        self.parser.process_map()
 
         # fake TODO code 
+        # tbh it looks like this is all just going in processor 
         rounds = self.rounds.extract(processed_demo)
         kill_events = self.kills.extract(processed_demo)
         grenade_events = self.grenades.extract(processed_demo)
