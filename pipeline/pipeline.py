@@ -10,7 +10,7 @@ from . import (
 
 class Pipeline():
     def __init__(self, source: str | discord.Attachment):
-        self.parser = DemoProcessor(demo_url=demo_url)
+        self.processor = DemoProcessor(source)
         self.rounds = RoundExtractor()
         self.kills = KillExtractor()
         self.grenades = GrenadeExtractor()
@@ -20,8 +20,8 @@ class Pipeline():
     async def run(self):
         # real code
         processed_demo = await self.parser.process_demo()
-        self.parser.process_players()
-        self.parser.process_map()
+        self.processor.process_players()
+        self.processor.process_map()
 
         # fake TODO code 
         # tbh it looks like this is all just going in processor 

@@ -59,6 +59,25 @@ def get_guild(
 ):
     return get_guild_or_404(guild_id, db)
 
+@router.get("/guild-id/{guild_id}", response_model=GuildResponse)
+def get_guild_by_guild_id(
+    guild_id: int,
+    db: Session = Depends(get_db)
+):
+    guild = (
+        db.query(Guild)
+        .filter(Guild.guild_id == guild_id)
+        .first()
+    )
+
+    if not guild:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Guild not found"
+        )
+
+    return guild
+
 @router.post("/", response_model=GuildResponse, status_code=status.HTTP_201_CREATED)
 def create_guild(
     guild: GuildCreate,

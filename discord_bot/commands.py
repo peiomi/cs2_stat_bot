@@ -1,5 +1,4 @@
 import requests
-import asyncio
 
 from .bot import bot
 from .pipeline import Pipeline
@@ -52,13 +51,39 @@ async def link_steam_id(interaction: discord.Interaction, steam_id: str):
         "player_name": data["response"]["players"][0]["personaname"]
     }
     player_create = requests.post("http://localhost:8000/players", json=player_payload)
+    player_create.raise_for_status()
     player = player_create.json()
 
     user_payload = {
-        "discord_id": interaction.user.id,
+        "discord_user_id": interaction.user.id,
         "username": interaction.user.name,
         "player_id": player["id"]
     }
     user_create = requests.post("http://localhost:8000/discord-users", json=user_payload)
+    user_create.raise_for_status()
+    user = user_create.json()
+
+    nickname = interaction.user.nick
+    if not nickname:
+        nickname = interaction.user.display_name
+
+    guild = requests.get(f"http://localhost:8000/guilds/guild-id/{interaction.guild.id}")
+    guild.raise_for_status()
+    guild_data = guild.json()
     
+    member_payload = {
+        "nickname": nickname,
+        "discord_user_id": user["id"]
+    }
+    
+    member_role = interaction.user.top_role.name
+    if member_role != "@everyone":
+        member_payload["member_role"] = member_role
+
+    member_create = requests.post(f"http://localhost:8000/guilds/{guild_data['id']}/members", json=member_payload)
+    member_create.raise_for_status()
+
+    await interaction.response.send_message(
+        f"successfully linked {user['username']}'s steam account: {player['player_name']}"
+    )
 

@@ -16,5 +16,7 @@ def root():
 
 """
 MESSAGE TO TOMMORROW ME:
- - do guild memeber table insert logic
+ - go back to pipeline, start extracting match data
+ - refactor link-steam 
+ - start putting the posts in postgres_loader
 """
