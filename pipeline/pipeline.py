@@ -20,11 +20,13 @@ class Pipeline():
     async def run(self):
         # real code
         processed_demo = await self.parser.process_demo()
-        self.processor.process_players()
-        self.processor.process_map()
+        players = self.processor.process_players()
+        self.postgres.load_players(players)
+
+        map_name = self.processor.process_map()
+        self.postgres.load_map(map_name)
 
         # fake TODO code 
-        # tbh it looks like this is all just going in processor 
         rounds = self.rounds.extract(processed_demo)
         kill_events = self.kills.extract(processed_demo)
         grenade_events = self.grenades.extract(processed_demo)

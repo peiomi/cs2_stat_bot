@@ -17,6 +17,6 @@ def root():
 """
 MESSAGE TO TOMMORROW ME:
  - go back to pipeline, start extracting match data
- - refactor link-steam 
- - start putting the posts in postgres_loader
+ - fix Match model - should have a match_id as unique constraint 
+    not filename as unique constraint
 """

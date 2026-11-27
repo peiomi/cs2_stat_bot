@@ -55,14 +55,6 @@ class DemoProcessor():
             raise ValueError("process_demo() must be called first")
 
         players = self.demo.parse_player_info()
-
-        for player in players:
-            payload = {
-                "steam_id": player.steamid,
-                "name": player.name
-            }
-
-            response = requests.post("http://localhost:8000/players", json=payload)
         
         return players
 
@@ -72,11 +64,6 @@ class DemoProcessor():
 
         header = self.demo.parse_header()
         map_name = header["map_name"]
-        payload = {
-            "name": map_name
-        }
-
-        response = requests.post("http://localhost:8000/maps", json=payload)
 
         return map_name
 
