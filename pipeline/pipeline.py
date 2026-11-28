@@ -25,6 +25,7 @@ class Pipeline():
 
         map_name = self.processor.process_map()
         self.postgres.load_map(map_name)
+        file_hash = processed_demo.file_hash
 
         # fake TODO code 
         rounds = self.rounds.extract(processed_demo)

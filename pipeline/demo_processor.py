@@ -4,12 +4,15 @@ import bz2
 import shutil
 import discord
 from pathlib import Path
+import hashlib
 
+# tomorrow me you need to figure out: should the state of the processor change o_0 ?
 class DemoProcessor():
     def __init__(self, source: str | discord.Attachment):
         self.source = source
         self.demo = None
         self.demo_name = ""
+        self.file_hash = ""
 
     async def process_demo(self):
         if isinstance(self.source, str):
@@ -46,9 +49,21 @@ class DemoProcessor():
             else:
                 raise ValueError("File must be .dem or .dem.bz2")
 
+        self.file_hash = self.get_file_hash(self.demo_name)
+
         self.demo = DemoParser(self.demo_name)
 
         return self.demo
+
+    # doing this to prevent duplicate demos
+    def get_file_hash(self, filename):
+        sha256 = hashlib.sha256()
+
+        with open(filename, "rb") as f:
+            for chunk in iter(lambda: f.read(8192), b""):
+                sha256.update(chunk)
+
+        return sha256.hexdigest()
 
     def process_players(self):
         if self.demo is None:
@@ -67,21 +82,15 @@ class DemoProcessor():
 
         return map_name
 
+    def process_match(self):
+        if self.demo is None:
+            raise ValueError("process_demo() must be called first")
+
     
         
 # just for experimenting w demoparser2
 if __name__ == "__main__":
-    demo = Demo("003853913717792047283_0996826481.dem")
-    kills = demo.parse_event("player_death")
-    print(
-        kills[
-            [
-                "attacker_name",
-                "user_name",
-                "assister_name",
-                "weapon",
-                "headshot",
-                "tick"
-            ]
-        ].head()
-    )
+    demo = DemoParser("003853913717792047283_0996826481.dem")
+    header = demo.parse_header()
+    for key, value in header.items():
+        print(key, value)

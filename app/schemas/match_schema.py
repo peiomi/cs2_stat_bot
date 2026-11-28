@@ -5,6 +5,7 @@ class MatchBase(BaseModel):
     match_date: date
     winning_team: str | None = None
     demo_filename: str
+    file_hash: str
 
 class MatchCreate(MatchBase):
     map_id: int
